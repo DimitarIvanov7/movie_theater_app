@@ -21,6 +21,15 @@ export class BookingService {
 
     return found;
   }
+
+  async createBooking(createBookingDto: CreateBookingDto): Promise<Booking> {
+    const booking = this.bookingsRepository.create(createBookingDto);
+
+    await this.bookingsRepository.save(booking);
+
+    return booking;
+  }
+
   //   private bookings: Booking[] = [];
   //   getAllBookings(): Booking[] {
   //     return this.bookings;
@@ -53,11 +62,4 @@ export class BookingService {
   //     booking.status = status;
   //     return booking;
   //   }
-  async createBooking(createBookingDto: CreateBookingDto): Promise<Booking> {
-    const booking = this.bookingsRepository.create(createBookingDto);
-
-    await this.bookingsRepository.save(booking);
-
-    return booking;
-  }
 }
