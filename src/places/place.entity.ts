@@ -15,6 +15,9 @@ export class Place {
   @Column()
   address: string;
 
+  @Column()
+  picture: string;
+
   @OneToMany(() => Hall, (hall) => hall.place)
   bookings: Hall[];
 }

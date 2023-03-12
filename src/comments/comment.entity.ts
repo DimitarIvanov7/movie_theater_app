@@ -10,6 +10,15 @@ export class Comment {
   @Column({ type: 'text' })
   text: string;
 
+  @Column()
+  movieId: string;
+
+  @Column()
+  userId: string;
+
+  @Column({ nullable: true })
+  commentId: string;
+
   @ManyToOne(() => Movie, (movie) => movie.id, { onDelete: 'CASCADE' })
   movie: Movie;
 

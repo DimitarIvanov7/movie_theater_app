@@ -16,6 +16,9 @@ export class Hall {
   @Column()
   num: number;
 
+  @Column()
+  placeId: string;
+
   @ManyToOne(() => Place, (place) => place.id)
   place: Place;
 

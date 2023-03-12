@@ -14,10 +14,8 @@ export class Rating {
   rating: number;
 
   @ManyToOne(() => Movie, (movie) => movie.id, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'movie' })
   movie: Movie;
 
   @ManyToOne(() => User, (user) => user.id, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'user' })
   user: User;
 }

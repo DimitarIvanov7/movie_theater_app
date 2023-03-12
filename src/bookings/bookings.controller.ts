@@ -10,15 +10,15 @@ import { UpdateBookingStatusDto } from './dto/update-booking-dto';
 export class BookingController {
   constructor(private bookingService: BookingService) {}
 
-  @Get('/:id')
-  getBookingByid(@Param('id') id: string): Promise<Booking> {
-    return this.bookingService.getBookingById(id);
-  }
-
   @Post()
   createBooking(@Body() CreateBookingDto: CreateBookingDto): Promise<Booking> {
     return this.bookingService.createBooking(CreateBookingDto);
   }
+
+  // @Get('/:id')
+  // getBookingByid(@Param('id') id: string): Promise<Booking> {
+  //   return this.bookingService.getBookingById(id);
+  // }
 
   // @Get()
   // getAllBookings(@Query() filterDto: getBookingsFilterDto): Booking[] {

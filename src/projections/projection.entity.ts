@@ -14,17 +14,20 @@ export class Projection {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'date' })
-  date: Date;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  date: string;
 
-  @Column()
-  seat: number;
-
-  @Column()
+  @Column({ type: 'decimal' })
   price: number;
 
   @Column()
   ['3d']: boolean;
+
+  @Column()
+  hallId: string;
+
+  @Column()
+  movieId: string;
 
   @ManyToOne(() => Movie, (movie) => movie.id)
   movie: Movie;

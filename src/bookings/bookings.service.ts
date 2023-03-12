@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { BookingStatus } from './booking-status.enum';
 import { CreateBookingDto } from './dto/create-bookig.dto';
 import { getBookingsFilterDto } from './dto/get-bookings-filter.dto';
@@ -14,21 +18,26 @@ export class BookingService {
     private bookingsRepository: BookingsRepository,
   ) {}
 
-  async getBookingById(id: string): Promise<Booking> {
-    const found = await this.bookingsRepository.findOneBy({ id: id });
-
-    if (!found) throw new NotFoundException(`Task with ID ${id} not found`);
-
-    return found;
-  }
-
   async createBooking(createBookingDto: CreateBookingDto): Promise<Booking> {
     const booking = this.bookingsRepository.create(createBookingDto);
 
-    await this.bookingsRepository.save(booking);
+    try {
+      await this.bookingsRepository.save(booking);
+    } catch (err) {
+      console.log(err);
+      throw new BadRequestException('Wrong data');
+    }
 
     return booking;
   }
+
+  // async getBookingById(id: string): Promise<Booking> {
+  //   const found = await this.bookingsRepository.findOneBy({ id: id });
+
+  //   if (!found) throw new NotFoundException(`Task with ID ${id} not found`);
+
+  //   return found;
+  // }
 
   //   private bookings: Booking[] = [];
   //   getAllBookings(): Booking[] {

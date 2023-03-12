@@ -13,6 +13,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: string;
+
   @OneToMany(() => Booking, (booking) => booking.user)
   bookings: Booking[];
 

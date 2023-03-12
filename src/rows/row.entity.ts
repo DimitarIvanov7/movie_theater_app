@@ -10,6 +10,9 @@ export class Row {
   seats: number;
 
   @Column()
+  hallId: string;
+
+  @Column()
   num: number;
 
   @ManyToOne(() => Hall, (hall) => hall.id)

@@ -1,22 +1,22 @@
 import { IsNotEmpty, IsEnum, IsUUID, IsOptional } from 'class-validator';
-import { BookingStatus } from '../booking-status.enum';
 
-export class CreateBookingDto {
+export class CreateCommentDto {
   @IsOptional()
+  @IsUUID(4)
   id?: string;
 
-  @IsNotEmpty()
-  seat: number;
+  @IsOptional()
+  @IsUUID(4)
+  commentId: string;
 
   @IsNotEmpty()
   @IsUUID(4)
-  rowId: string;
-
-  @IsNotEmpty()
-  @IsUUID(4)
-  projectionId: string;
+  movieId: string;
 
   @IsNotEmpty()
   @IsUUID(4)
   userId: string;
+
+  @IsNotEmpty()
+  text: string;
 }
