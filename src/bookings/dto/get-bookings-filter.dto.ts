@@ -1,4 +1,4 @@
-export class getBookingsFilterDto {
+export class GetBookingsFilterDto {
   projection: string;
   movie: string;
 }

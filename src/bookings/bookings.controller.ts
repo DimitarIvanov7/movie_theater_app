@@ -3,7 +3,8 @@ import { Delete, Param, Query } from '@nestjs/common/decorators';
 import { Booking } from './booking.entity';
 import { BookingService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-bookig.dto';
-import { getBookingsFilterDto } from './dto/get-bookings-filter.dto';
+import { GetBookingDto } from './dto/get-booking.dto';
+// import { getBookingsFilterDto } from './dto/get-bookings-filter.dto';
 import { UpdateBookingStatusDto } from './dto/update-booking-dto';
 
 @Controller('bookings')
@@ -15,21 +16,21 @@ export class BookingController {
     return this.bookingService.createBooking(CreateBookingDto);
   }
 
-  // @Get('/:id')
-  // getBookingByid(@Param('id') id: string): Promise<Booking> {
-  //   return this.bookingService.getBookingById(id);
-  // }
+  @Get()
+  getBooking(@Query() getBookingDto: GetBookingDto): Promise<Booking> {
+    return this.bookingService.getBooking(getBookingDto);
+  }
+
+  @Delete()
+  deleteBookingById(@Query() getBookingDto: GetBookingDto): Promise<void> {
+    return this.bookingService.deleteBooking(getBookingDto);
+  }
 
   // @Get()
   // getAllBookings(@Query() filterDto: getBookingsFilterDto): Booking[] {
   //   if (Object.keys(filterDto).length) {
   //     return this.bookingService.getBookingWithFilters(filterDto);
   //   } else return this.bookingService.getAllBookings();
-  // }
-
-  // @Delete('/:id')
-  // deleteBookingById(@Param('id') id: string): void {
-  //   return this.bookingService.deleteBookingById(id);
   // }
 
   // @Patch('/:id/seat')

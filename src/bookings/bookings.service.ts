@@ -3,13 +3,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { BookingStatus } from './booking-status.enum';
 import { CreateBookingDto } from './dto/create-bookig.dto';
-import { getBookingsFilterDto } from './dto/get-bookings-filter.dto';
 import { BookingsRepository } from './bookings.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booking } from './booking.entity';
 import { DeepPartial } from 'typeorm';
+import { GetBookingDto } from './dto/get-booking.dto';
 
 @Injectable()
 export class BookingService {
@@ -31,13 +30,26 @@ export class BookingService {
     return booking;
   }
 
-  // async getBookingById(id: string): Promise<Booking> {
-  //   const found = await this.bookingsRepository.findOneBy({ id: id });
+  async getBooking(getBookingDto: GetBookingDto): Promise<Booking> {
+    const found = await this.bookingsRepository.findOneBy(getBookingDto);
 
-  //   if (!found) throw new NotFoundException(`Task with ID ${id} not found`);
+    if (!found)
+      throw new NotFoundException(
+        `Booking with userId ${getBookingDto.userId} and projectionId ${getBookingDto.projectionId} not found`,
+      );
 
-  //   return found;
-  // }
+    return found;
+  }
+
+  async deleteBooking(getBookingDto: GetBookingDto): Promise<void> {
+    const result = await this.bookingsRepository.delete(getBookingDto);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(
+        `Booking with userId ${getBookingDto.userId} and projectionId ${getBookingDto.projectionId} not found`,
+      );
+    }
+  }
 
   //   private bookings: Booking[] = [];
   //   getAllBookings(): Booking[] {
@@ -56,10 +68,6 @@ export class BookingService {
   //     const found = this.bookings.find((booking) => booking.id === id);
   //     if (!found) throw new NotFoundException(`Task with ID ${id} not found`);
   //     return found;
-  //   }
-  //   deleteBookingById(id: string): void {
-  //     const found = this.getBookingById(id);
-  //     this.bookings = this.bookings.filter((booking) => booking.id !== id);
   //   }
   //   updateBookingSeat(id: string, seat: number): Booking {
   //     const booking = this.getBookingById(id);

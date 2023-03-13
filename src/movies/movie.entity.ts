@@ -33,5 +33,6 @@ export class Movie {
   rating: Rating[];
 
   @ManyToMany(() => Genre, (genre) => genre.movie)
+  @JoinTable()
   genre: Genre[];
 }
