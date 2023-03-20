@@ -1,6 +1,6 @@
 import { Projection } from 'src/projections/projection.entity';
 import { Row } from 'src/rows/row.entity';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/auth/user.entity';
 import { Entity, Column, ManyToOne, PrimaryColumn } from 'typeorm';
 import { BookingStatus } from './booking-status.enum';
 

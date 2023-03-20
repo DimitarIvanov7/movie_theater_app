@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { BookingModule } from './bookings/bookings.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 import { PlacesModule } from './places/places.module';
 import { HallsModule } from './halls/halls.module';
 import { RowsModule } from './rows/rows.module';
@@ -10,7 +10,7 @@ import { ProjectionsModule } from './projections/projections.module';
 import { RatingsModule } from './ratings/ratings.module';
 import { CommentsModule } from './comments/comments.module';
 import { Booking } from './bookings/booking.entity';
-import { User } from './users/user.entity';
+import { User } from './auth/user.entity';
 import { Movie } from './movies/movie.entity';
 import { Projection } from './projections/projection.entity';
 import { Row } from './rows/row.entity';
@@ -45,7 +45,7 @@ import { Genre } from './movies/genre.entity';
         Genre,
       ],
     }),
-    UsersModule,
+    AuthModule,
     PlacesModule,
     HallsModule,
     RowsModule,

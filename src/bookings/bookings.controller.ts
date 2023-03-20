@@ -1,13 +1,15 @@
 import { Body, Controller, Get, Post, Patch } from '@nestjs/common';
-import { Delete, Param, Query } from '@nestjs/common/decorators';
+import { Delete, Param, Query, UseGuards } from '@nestjs/common/decorators';
 import { Booking } from './booking.entity';
 import { BookingService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-bookig.dto';
 import { GetBookingDto } from './dto/get-booking.dto';
 // import { getBookingsFilterDto } from './dto/get-bookings-filter.dto';
 import { UpdateBookingStatusDto } from './dto/update-booking-dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('bookings')
+@UseGuards(AuthGuard())
 export class BookingController {
   constructor(private bookingService: BookingService) {}
 
