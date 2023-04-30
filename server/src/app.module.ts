@@ -22,6 +22,8 @@ import { Genre } from './movies/genre.entity';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config/dist';
 import { configValidationSchema } from './config.schema';
+import { AtGuard } from './common/guards/at.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -64,6 +66,12 @@ import { configValidationSchema } from './config.schema';
     ProjectionsModule,
     RatingsModule,
     CommentsModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
   ],
 })
 export class AppModule {}

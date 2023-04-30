@@ -7,14 +7,14 @@ import { CreateBookingDto } from './dto/create-bookig.dto';
 // import { getBookingsFilterDto } from './dto/get-bookings-filter.dto';
 // import { UpdateBookingStatusDto } from './dto/update-booking-dto';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user.decorator';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 import { GetBookingsFilterDto } from './dto/get-bookings-filter.dto';
 import { GetBookingDto } from './dto/get-booking.dto';
 import { Logger } from '@nestjs/common';
 
 @Controller('bookings')
-@UseGuards(AuthGuard())
+// @UseGuards(AuthGuard('jwt-access'))
 export class BookingController {
   private logger = new Logger('Bookings controller');
   constructor(private bookingService: BookingService) {}

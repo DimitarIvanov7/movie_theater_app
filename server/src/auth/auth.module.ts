@@ -6,7 +6,8 @@ import { UsersRepository } from './users.repository';
 import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { JwtRefreshTokenStrategy } from './strategies/jwt-refreshToken.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -26,7 +27,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersRepository, JwtStrategy],
-  exports: [JwtStrategy, PassportModule],
+  providers: [
+    AuthService,
+    UsersRepository,
+    JwtStrategy,
+    JwtRefreshTokenStrategy,
+  ],
+  exports: [JwtStrategy, JwtRefreshTokenStrategy, PassportModule],
 })
 export class AuthModule {}
