@@ -2,15 +2,14 @@ import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common/decorators';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { AuthCredentialsDto } from './dto/authCredentials.dto';
+import { AuthCredentialsSingUpDto } from './dto/authCredentialsSingUp.dto';
 import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
 
 import { NotFoundException } from '@nestjs/common';
-
-import * as bcrypt from 'bcrypt';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
@@ -31,19 +30,16 @@ export class UsersRepository extends Repository<User> {
     return user;
   }
 
-  async createUser(AuthCredentialsDto: AuthCredentialsDto): Promise<User> {
-    const { name, password } = AuthCredentialsDto;
+  async createUser(
+    AuthCredentialsSingUpDto: AuthCredentialsSingUpDto,
+  ): Promise<User> {
+    const { name, password, email } = AuthCredentialsSingUpDto;
 
-    const passSalt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, passSalt);
-
-    const rtSalt = await bcrypt.genSalt();
-    const hashedRefreshToken = await bcrypt.hash(name, rtSalt);
-
+    const hashedPassword = await argon2.hash(password);
     const user = this.create({
       name,
+      email,
       password: hashedPassword,
-      refreshToken: hashedRefreshToken,
     });
 
     try {
@@ -63,8 +59,7 @@ export class UsersRepository extends Repository<User> {
     userId: string,
     refreshToken: string,
   ): Promise<void> {
-    const salt = await bcrypt.genSalt();
-    const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
+    const hashedRefreshToken = await argon2.hash(refreshToken);
 
     const user = await this.getUserById(userId);
 

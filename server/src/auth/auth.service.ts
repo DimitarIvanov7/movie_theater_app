@@ -4,14 +4,17 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthCredentialsDto } from './dto/authCredentials.dto';
+import { AuthCredentialsSingUpDto } from './dto/authCredentialsSingUp.dto';
 import { UsersRepository } from './users.repository';
 import { JwtService } from '@nestjs/jwt/dist';
-import { JwtPayload } from './models/jwt-payload.interface';
-import { Tokens } from './models/tokens.type';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { Tokens } from './interfaces/tokens.type';
 import { ConfigService } from '@nestjs/config';
 import { User } from './user.entity';
-import * as bcrypt from 'bcrypt';
+
+import * as argon2 from 'argon2';
+
+import { AuthCredentialsSingInDto } from './dto/authCredentialsSingIn.dto';
 
 @Injectable()
 export class AuthService {
@@ -22,24 +25,33 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<Tokens> {
-    const user = await this.userRepository.createUser(AuthCredentialsDto);
+  async signUp(
+    AuthCredentialsSingUpDto: AuthCredentialsSingUpDto,
+  ): Promise<Tokens> {
+    const user = await this.userRepository.createUser(AuthCredentialsSingUpDto);
 
     const tokens = await this.getTokens(user.name);
+
+    await this.userRepository.updateRefreshTokenHash(
+      user.id,
+      tokens.refreshToken,
+    );
 
     return tokens;
   }
 
-  async signIn(AuthCredentialsDto: AuthCredentialsDto): Promise<Tokens> {
-    const { name, password } = AuthCredentialsDto;
+  async signIn(
+    AuthCredentialsSingInDto: AuthCredentialsSingInDto,
+  ): Promise<Tokens> {
+    const { name, password } = AuthCredentialsSingInDto;
 
     const user = await this.userRepository.findOneBy({ name });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
+    if (user && (await argon2.verify(user.password, password))) {
       const tokens = await this.getTokens(name);
       await this.userRepository.updateRefreshTokenHash(
         user.id,
-        tokens.refresh_token,
+        tokens.refreshToken,
       );
 
       return tokens;
@@ -50,6 +62,26 @@ export class AuthService {
 
   async logout(user: User): Promise<void> {
     return this.userRepository.deleteRefreshToken(user);
+  }
+
+  async refresh(name: string, rt: string): Promise<Tokens> {
+    const user = await this.userRepository.findOneBy({ name });
+
+    if (!user || !user.refreshToken)
+      throw new UnauthorizedException('Access denied');
+
+    const rtMatches = await argon2.verify(user.refreshToken, rt);
+
+    if (!rtMatches) throw new UnauthorizedException('Access denied');
+
+    const tokens = await this.getTokens(user.name);
+
+    await this.userRepository.updateRefreshTokenHash(
+      user.id,
+      tokens.refreshToken,
+    );
+
+    return tokens;
   }
 
   async getTokens(name: string): Promise<Tokens> {
@@ -76,8 +108,8 @@ export class AuthService {
     ]);
 
     return {
-      access_token: accessToken,
-      refresh_token: refreshToken,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     };
   }
 }

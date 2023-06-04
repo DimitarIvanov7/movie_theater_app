@@ -3,3 +3,5 @@ export interface JwtPayload {
   iat: number;
   exp: number;
 }
+
+export type JwtPayloadWithRt = JwtPayload & { refreshToken: string };

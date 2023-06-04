@@ -4,6 +4,8 @@ export const ExtractToken = createParamDecorator(
   (_data, context: ExecutionContext): string => {
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization?.split(' ')[1];
+    console.log('token mate', token);
+
     return token;
   },
 );

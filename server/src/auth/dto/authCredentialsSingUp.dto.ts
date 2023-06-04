@@ -10,11 +10,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class AuthCredentialsDto {
-  @IsOptional()
-  @IsUUID(4)
-  id?: string;
-
+export class AuthCredentialsSingUpDto {
   @IsString()
   @MinLength(4)
   @MaxLength(20)
@@ -24,11 +20,13 @@ export class AuthCredentialsDto {
   @MinLength(8)
   @MaxLength(32)
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'password is too weak',
+    message: 'Password is too weak',
   })
   password: string;
 
-  @IsOptional()
-  @IsDate()
-  created_at?: string;
+  @IsString()
+  @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, {
+    message: 'Email not valid',
+  })
+  email: string;
 }
