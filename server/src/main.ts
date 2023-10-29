@@ -8,7 +8,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformInterceptor());
-  app.enableCors({ origin: 'http://localhost:5500' });
+  app.enableCors({
+    origin: 'http://localhost:5500',
+    credentials: true, // Enable credentials
+  });
   const port = 3000;
   await app.listen(port);
   logger.log(`Application listening on port ${port}`);

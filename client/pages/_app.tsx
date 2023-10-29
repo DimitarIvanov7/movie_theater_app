@@ -1,9 +1,9 @@
-import "@/src/styles/globals.css";
-import type { AppProps } from "next/app";
-import { PersistGate } from "redux-persist/integration/react";
-import { wrapper } from "@/src/store/store";
-import Layout from "@/src/components/Layout";
-import { Provider } from "react-redux";
+import '@/src/styles/globals.css';
+import type { AppProps } from 'next/app';
+import { PersistGate } from 'redux-persist/integration/react';
+import { wrapper } from '@/src/features/store/store';
+import Layout from '@/src/components/Layout';
+import { Provider } from 'react-redux';
 
 function MyApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);

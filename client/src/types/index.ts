@@ -1,12 +1,12 @@
-import { AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export enum AuthType {
-  SignUp = "signup",
-  SignIn = "signin",
-  Refresh = "refresh",
+  SignUp = 'signup',
+  SignIn = 'signin',
+  Refresh = 'refresh',
 }
 
-export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 export interface SingInData {
   name: string;
