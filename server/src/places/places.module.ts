@@ -8,6 +8,6 @@ import { PlacesService } from './places.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Place])],
   controllers: [PlacesController],
-  providers: [PlacesService, PlacesRepository],
+  providers: [PlacesRepository, PlacesService],
 })
 export class PlacesModule {}

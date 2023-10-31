@@ -12,14 +12,12 @@ import {
 
 import storage from 'redux-persist/lib/storage';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import { createWrapper } from 'next-redux-wrapper';
 import authSlice from '../auth/authSlice';
 import { apiSlice } from '@/src/api/apiSlice';
 
 const rootReducer = combineReducers({
-  [authSlice.name]: authSlice,
+  [authSlice.name]: authSlice.reducer,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
@@ -40,19 +38,19 @@ export const makeStore = () => {
       key: 'nextjs',
       whitelist: ['auth'], // make sure it does not clash with server keys
       // blacklist: ['api'],
-      storage: AsyncStorage,
+      storage: storage,
     };
     const persistedReducer = persistReducer(persistConfig, rootReducer);
     let store: any = configureStore({
       reducer: persistedReducer,
       devTools: process.env.NODE_ENV !== 'production',
       middleware: (getDefaultMiddleware) => [
-        apiSlice.middleware,
         ...getDefaultMiddleware({
           serializableCheck: {
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
           },
         }),
+        apiSlice.middleware,
       ],
     });
     store.__persistor = persistStore(store);

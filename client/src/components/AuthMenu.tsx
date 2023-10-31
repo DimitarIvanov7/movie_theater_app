@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { AuthType, SingUpData, SingInData } from '../types';
+import { AuthType } from '../types';
 
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { AppState } from '../features/store/store';
+import { useDispatch, useSelector } from 'react-redux';
 import Input from './Input';
-import { useSingUpMutation } from '../features/auth/authApiSlice';
+import {
+  useLoginMutation,
+  useSingUpMutation,
+} from '../features/auth/authApiSlice';
 
 import {
   User,
@@ -14,29 +16,22 @@ import {
 
 interface Props {
   closeAuth(): void;
-  user: User;
 }
 
-const AuthMenu = ({ closeAuth, user }: Props) => {
+const AuthMenu = ({ closeAuth }: Props) => {
   const dispatch = useDispatch();
 
-  // const [login, { isLoading }] = useLoginMutation()
+  const user = useSelector(selectCurrentUser);
 
-  const currentUser = useSelector(selectCurrentUser);
+  const [singup, singUpStatus] = useSingUpMutation();
 
-  console.log(currentUser);
-
-  console.log(user);
-
-  const [singup, { isLoading }] = useSingUpMutation();
+  const [login, loginStatus] = useLoginMutation();
 
   const [authType, setAuthType] = useState<AuthType>(AuthType.SignIn);
 
   const [name, setName] = useState('');
 
   const [password, setPassword] = useState('');
-
-  const [passwordRepeat, setPasswordRepat] = useState('');
 
   const [email, setEmail] = useState('');
 
@@ -48,31 +43,30 @@ const AuthMenu = ({ closeAuth, user }: Props) => {
     setEmail('');
   };
 
-  const handleCreateAccount = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  const handleAuthentication = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    type: AuthType
   ) => {
     e.preventDefault();
 
     try {
-      const userData = await singup({ name, password, email });
+      const userData =
+        type === AuthType.SignUp
+          ? await singup({ name, password, email }).unwrap()
+          : await login({ name, password }).unwrap();
 
-      if (userData.error) {
-        setErrorMsg(userData.error.data.message);
+      console.log(userData);
 
-        return;
+      if (userData?.status >= 400) {
+        throw new Error(userData.message);
       }
-      dispatch(setCredentials({ ...userData }));
+
+      dispatch(setCredentials(userData));
       clearInputs();
     } catch (e: any) {
       console.log(e);
+      setErrorMsg(e.data?.message || 'An error has occured');
     }
-  };
-
-  const handleSignIn = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    // dispatch(login({ name, password }));
   };
 
   const handleAuthorizationFrom = () => {
@@ -102,17 +96,14 @@ const AuthMenu = ({ closeAuth, user }: Props) => {
 
           <Input label={'Password'} value={password} onChange={setPassword} />
 
-          {authType == AuthType.SignUp && (
-            <Input
-              label={'Repeat password'}
-              value={passwordRepeat}
-              onChange={setPasswordRepat}
-            />
-          )}
           {authType === AuthType.SignUp ? (
-            <button onClick={handleCreateAccount}>Create account</button>
+            <button onClick={(e) => handleAuthentication(e, AuthType.SignUp)}>
+              Create account
+            </button>
           ) : (
-            <button onClick={handleSignIn}>Login</button>
+            <button onClick={(e) => handleAuthentication(e, AuthType.SignIn)}>
+              Login
+            </button>
           )}
         </form>
       </div>
@@ -121,18 +112,11 @@ const AuthMenu = ({ closeAuth, user }: Props) => {
         <button onClick={handleAuthorizationFrom}>
           {authType === AuthType.SignUp ? 'Sing in' : 'Sign up'}
         </button>
-        <p className="text-red-400">
-          {errorMsg && !user && <div>{errorMsg}</div>}
-        </p>
+
+        {errorMsg && !user && <p className="text-red-400">{errorMsg}</p>}
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state: AppState) => {
-  return {
-    user: selectCurrentUser(state),
-  };
-};
-
-export default connect(mapStateToProps)(AuthMenu);
+export default AuthMenu;

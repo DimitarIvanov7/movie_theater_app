@@ -12,6 +12,7 @@ export class GetBookingDto {
 
   @IsNotEmpty()
   row_num: number;
+
   @IsNotEmpty()
   hall_num: number;
 

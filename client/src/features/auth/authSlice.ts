@@ -13,9 +13,7 @@ const authSlice = createSlice({
   initialState: { accessToken: null, refreshToken: null, name: null } as User,
   reducers: {
     setCredentials: (state, action) => {
-      console.log(action);
-
-      const { accessToken, refreshToken } = action.payload.data;
+      const { accessToken, refreshToken } = action.payload;
 
       const decodedToken = jwt.decode(accessToken) as JwtPayload;
 
@@ -25,14 +23,16 @@ const authSlice = createSlice({
       state.refreshToken = refreshToken;
       state.name = name;
     },
-    logout: (state, action) => {
+    logout: (state) => {
       state.accessToken = null;
+      state.refreshToken = null;
+      state.name = null;
     },
   },
 });
 
 export const { setCredentials, logout } = authSlice.actions;
 
-export default authSlice.reducer;
+export default authSlice;
 
-export const selectCurrentUser = (state: AppState): User => state.auth;
+export const selectCurrentUser = (state: AppState): User => state.auth.name;
