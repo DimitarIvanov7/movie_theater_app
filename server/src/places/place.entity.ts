@@ -18,6 +18,6 @@ export class Place {
   @Column()
   picture: string;
 
-  @OneToMany(() => Hall, (hall) => hall.place)
-  bookings: Hall[];
+  @OneToMany(() => Hall, (hall) => hall.place, { eager: true })
+  halls: Hall[];
 }

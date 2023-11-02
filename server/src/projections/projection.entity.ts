@@ -29,7 +29,7 @@ export class Projection {
   @Column()
   movieId: string;
 
-  @ManyToOne(() => Movie, (movie) => movie.id)
+  @ManyToOne(() => Movie, (movie) => movie.id, { eager: true })
   movie: Movie;
 
   @ManyToOne(() => Hall, (hall) => hall.id)

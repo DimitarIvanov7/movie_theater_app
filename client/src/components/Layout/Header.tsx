@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AuthMenu from './AuthMenu';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, selectCurrentUser } from '../features/auth/authSlice';
+import { logout, selectCurrentUser } from '../../features/auth/authSlice';
 
 const Header = ({}) => {
   const [isAuthMenuOpen, setAuthMenuOpen] = useState<Boolean>(false);

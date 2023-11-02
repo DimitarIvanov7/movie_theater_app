@@ -1,4 +1,5 @@
 import { Place } from 'src/places/place.entity';
+import { Projection } from 'src/projections/projection.entity';
 import { Row } from 'src/rows/row.entity';
 import {
   Entity,
@@ -23,5 +24,8 @@ export class Hall {
   place: Place;
 
   @OneToMany(() => Row, (row) => row.hall)
-  bookings: Row[];
+  rows: Row[];
+
+  @OneToMany(() => Projection, (projection) => projection.hall, { eager: true })
+  projections: Projection[];
 }

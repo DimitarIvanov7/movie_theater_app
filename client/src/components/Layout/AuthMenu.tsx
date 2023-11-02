@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { AuthType } from '../types';
+import { AuthType } from '../../types';
 
 import { useDispatch, useSelector } from 'react-redux';
-import Input from './Input';
+import Input from '../Common/Input';
 import {
   useLoginMutation,
   useSingUpMutation,
-} from '../features/auth/authApiSlice';
+} from '../../features/auth/authApiSlice';
 
 import {
   User,
   selectCurrentUser,
   setCredentials,
-} from '../features/auth/authSlice';
+} from '../../features/auth/authSlice';
 
 interface Props {
   closeAuth(): void;

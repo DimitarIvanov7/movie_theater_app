@@ -35,10 +35,6 @@ export class PlacesService {
   }
 
   async getOne(id: string): Promise<Place> {
-    const record = await this.placesRepository.findOneBy({ id });
-
-    if (record) {
-      return record;
-    } else throw new HttpException('Server error', 500);
+    return this.placesRepository.getPlace(id);
   }
 }
