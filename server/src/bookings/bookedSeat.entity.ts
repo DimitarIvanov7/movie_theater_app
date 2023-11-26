@@ -1,5 +1,4 @@
 import { Projection } from 'src/projections/projection.entity';
-import { Row } from 'src/rows/row.entity';
 import { User } from 'src/auth/user.entity';
 import {
   Entity,
@@ -20,8 +19,8 @@ export class BookedSeat {
   @Column()
   seat: number;
 
-  @Column()
-  rowId: string;
+  @Column({ default: 7 })
+  row: number;
 
   @Column()
   projectionId: string;
@@ -35,7 +34,4 @@ export class BookedSeat {
 
   @ManyToOne(() => Projection, (projection) => projection.id)
   projection: Projection;
-
-  @ManyToOne(() => Row, (row) => row.id)
-  row: Row;
 }

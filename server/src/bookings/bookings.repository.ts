@@ -1,4 +1,10 @@
-import { In, QueryBuilder, Repository, SelectQueryBuilder } from 'typeorm';
+import {
+  DeleteResult,
+  In,
+  QueryBuilder,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { Injectable } from '@nestjs/common/decorators';
 import { BookedSeat } from './bookedSeat.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,8 +39,7 @@ export class BookingsRepository extends Repository<BookedSeat> {
         'projection.id = booking.projectionId',
       )
       .innerJoin('projection.movie', 'movie', 'movie.id = projection.movieId')
-      .innerJoin('booking.row', 'row', 'row.id = booking.rowId')
-      .innerJoin('row.hall', 'hall', 'hall.id = row.hallId')
+      .innerJoin('projection.hall', 'hall', 'hall.id = projection.hallId')
       .innerJoin('hall.place', 'place', 'place.id = hall.placeId');
   }
 
@@ -47,13 +52,13 @@ export class BookingsRepository extends Repository<BookedSeat> {
         'place.name',
         'place.city',
         'hall.num',
-        'row.num',
+        'booking.row',
         'movie.name',
         'movie.image',
         'movie.length_minutes',
       ])
       .groupBy(
-        'booking.created_at, place.name, place.city, hall.num, row.num, movie.name, movie.image, movie.length_minutes',
+        'booking.created_at, place.name, place.city, hall.num, booking.row, movie.name, movie.image, movie.length_minutes',
       )
       .where({ user, id });
 
@@ -78,13 +83,13 @@ export class BookingsRepository extends Repository<BookedSeat> {
         'place.name',
         'place.city',
         'hall.num',
-        'row.num',
+        'booking.row',
         'movie.name',
         'movie.image',
         'movie.length_minutes',
       ])
       .groupBy(
-        'booking.created_at, place.name, place.city, hall.num, row.num, movie.name, movie.image, movie.length_minutes',
+        'booking.created_at, place.name, place.city, hall.num, booking.row, movie.name, movie.image, movie.length_minutes',
       )
       .where({ user });
     if (movieName) {
@@ -127,13 +132,13 @@ export class BookingsRepository extends Repository<BookedSeat> {
     createBookingDto: CreateBookingDto,
     user: User,
   ): Promise<BookedSeat[]> {
-    const { rowId, projectionId, seats } = createBookingDto;
+    const { row, projectionId, seats } = createBookingDto;
 
     const initialArr: BookedSeat[] = [];
 
     const exists = await this.findOne({
       where: {
-        rowId,
+        row,
         projectionId,
         seat: In(seats),
       },
@@ -145,7 +150,7 @@ export class BookingsRepository extends Repository<BookedSeat> {
     const booking = seats.reduce(
       (prev: BookedSeat[], seat: number) => [
         ...prev,
-        { rowId, projectionId, seat: seat, user },
+        { row, projectionId, seat: seat, user },
       ],
       initialArr,
     );
@@ -161,7 +166,7 @@ export class BookingsRepository extends Repository<BookedSeat> {
     return createBooking;
   }
 
-  async deleteBooking(id: string, user: User): Promise<void> {
+  async deleteBooking(id: string, user: User): Promise<DeleteResult> {
     const query = this.createQueryBuilder('bookings')
       .delete()
       .where({ id, user })
@@ -172,5 +177,7 @@ export class BookingsRepository extends Repository<BookedSeat> {
     if (result.affected === 0) {
       throw new NotFoundException();
     }
+
+    return result;
   }
 }

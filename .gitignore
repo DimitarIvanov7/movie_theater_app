@@ -1,10 +1,14 @@
 # compiled output
+node_modules
 /dist
 /server/node_modules
 /server/dist
 /resources
 /client/node_modules
 /client/.next
+/node_modules
+node_modules
+node_modules/
 
 # Logs
 logs
@@ -37,3 +41,5 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+

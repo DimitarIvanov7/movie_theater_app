@@ -10,14 +10,17 @@ export class Place {
   name: string;
 
   @Column()
-  city: string;
+  city: number;
 
   @Column()
   address: string;
 
-  @Column()
+  @Column({ nullable: true })
   picture: string;
 
-  @OneToMany(() => Hall, (hall) => hall.place, { eager: true })
+  @OneToMany(() => Hall, (hall) => hall.place, {
+    eager: true,
+    cascade: true,
+  })
   halls: Hall[];
 }

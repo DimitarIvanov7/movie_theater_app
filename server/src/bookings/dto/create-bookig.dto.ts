@@ -10,7 +10,7 @@ export class CreateBookingDto {
 
   @IsNotEmpty()
   @IsUUID(4)
-  rowId: string;
+  row: number;
 
   @IsNotEmpty()
   @IsUUID(4)

@@ -1,12 +1,11 @@
-import { IsDate, IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateProjectionDto {
   @IsOptional()
   @IsUUID(4)
   id?: string;
 
-  @IsOptional()
-  @IsDate()
+  @IsString()
   date: string;
 
   @IsNotEmpty()
@@ -19,5 +18,5 @@ export class CreateProjectionDto {
   movieId: string;
 
   @IsNotEmpty()
-  hallId: string;
+  placeId: string;
 }

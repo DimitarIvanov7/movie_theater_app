@@ -1,6 +1,5 @@
 import { Place } from 'src/places/place.entity';
 import { Projection } from 'src/projections/projection.entity';
-import { Row } from 'src/rows/row.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -20,12 +19,21 @@ export class Hall {
   @Column()
   placeId: string;
 
-  @ManyToOne(() => Place, (place) => place.id)
+  @Column({ default: 20 })
+  rows: number;
+
+  @Column({ default: 20 })
+  seats: number;
+
+  @ManyToOne(() => Place, (place) => place.id, {
+    onDelete: 'CASCADE',
+  })
   place: Place;
 
-  @OneToMany(() => Row, (row) => row.hall)
-  rows: Row[];
-
-  @OneToMany(() => Projection, (projection) => projection.hall, { eager: true })
+  @OneToMany(() => Projection, (projection) => projection.hall, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
   projections: Projection[];
 }

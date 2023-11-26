@@ -1,15 +1,6 @@
 import { Comment } from 'src/comments/comment.entity';
-import { Hall } from 'src/halls/hall.entity';
 import { Rating } from 'src/ratings/rating.entity';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
-import { Genre } from './genre.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class Movie {
@@ -25,13 +16,24 @@ export class Movie {
   @Column()
   image: string;
 
+  @Column({ nullable: true })
+  premieredate?: string;
+
+  @Column({ default: 'Няма информация за този филм' })
+  info: string;
+
+  @Column({ nullable: true })
+  genres: string;
+
+  @Column({ nullable: true })
+  actors: string;
+
+  @Column({ nullable: true })
+  director: string;
+
   @OneToMany(() => Comment, (comment) => comment.movie)
   comment: Comment[];
 
   @OneToMany(() => Rating, (rating) => rating.movie)
   rating: Rating[];
-
-  @ManyToMany(() => Genre, (genre) => genre.movie)
-  @JoinTable()
-  genre: Genre[];
 }

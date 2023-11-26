@@ -9,6 +9,12 @@ export class CreateHallDto {
   num: number;
 
   @IsNotEmpty()
+  rows: number;
+
+  @IsNotEmpty()
+  seats: number;
+
+  @IsNotEmpty()
   @IsUUID(4)
   placeId: string;
 }

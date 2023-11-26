@@ -1,4 +1,13 @@
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
+import { CreateHallDto } from 'src/halls/create-hall.dto';
 
 export class PlaceDto {
   @IsOptional()
@@ -10,14 +19,18 @@ export class PlaceDto {
   name: string;
 
   @IsNotEmpty()
-  @IsString()
-  city: string;
+  @IsNumber()
+  city: number;
+
+  @IsArray()
+  @ValidateNested()
+  halls: CreateHallDto[];
 
   @IsNotEmpty()
   @IsString()
   address: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   picture: string;
 }

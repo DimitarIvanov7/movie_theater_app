@@ -7,7 +7,7 @@ import { CreateBookingDto } from './dto/create-bookig.dto';
 import { BookingsRepository } from './bookings.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookedSeat } from './bookedSeat.entity';
-import { DeepPartial } from 'typeorm';
+import { DeepPartial, DeleteResult } from 'typeorm';
 import { User } from 'src/auth/user.entity';
 import { GetBookingsFilterDto } from './dto/get-bookings-filter.dto';
 import { GetBookingDto } from './dto/get-booking.dto';
@@ -37,8 +37,8 @@ export class BookingService {
     return this.bookingsRepository.getBooking(id, user);
   }
 
-  async deleteBooking(id: string, user: User): Promise<void> {
-    const result = await this.bookingsRepository.deleteBooking(id, user);
+  async deleteBooking(id: string, user: User): Promise<DeleteResult> {
+    return this.bookingsRepository.deleteBooking(id, user);
   }
 
   //   private bookings: BookedSeat[] = [];

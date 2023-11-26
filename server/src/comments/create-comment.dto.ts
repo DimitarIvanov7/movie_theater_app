@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEnum, IsUUID, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
 
 export class CreateCommentDto {
   @IsOptional()
@@ -12,10 +12,6 @@ export class CreateCommentDto {
   @IsNotEmpty()
   @IsUUID(4)
   movieId: string;
-
-  @IsNotEmpty()
-  @IsUUID(4)
-  userId: string;
 
   @IsNotEmpty()
   text: string;

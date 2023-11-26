@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { HallsService } from './halls.service';
 import { HallsController } from './halls.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,7 +7,7 @@ import { HallsRepository } from './halls.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Hall])],
-  providers: [HallsService, HallsRepository],
+  providers: [HallsService, HallsRepository, Logger],
   controllers: [HallsController],
 })
 export class HallsModule {}

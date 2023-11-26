@@ -12,6 +12,7 @@ import { User } from 'src/auth/user.entity';
 import { GetBookingsFilterDto } from './dto/get-bookings-filter.dto';
 import { GetBookingDto } from './dto/get-booking.dto';
 import { Logger } from '@nestjs/common';
+import { DeleteResult } from 'typeorm';
 
 @Controller('bookings')
 // @UseGuards(AuthGuard('jwt-access'))
@@ -53,7 +54,7 @@ export class BookingController {
   deleteBookingById(
     @Param('id') id: string,
     @GetUser() user: User,
-  ): Promise<void> {
+  ): Promise<DeleteResult> {
     return this.bookingService.deleteBooking(id, user);
   }
 

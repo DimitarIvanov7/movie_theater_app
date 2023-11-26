@@ -9,7 +9,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformInterceptor());
   app.enableCors({
-    origin: 'http://localhost:5500',
+    origin: ['http://localhost:5500', 'http://localhost:5173'],
     credentials: true, // Enable credentials
   });
   const port = 3000;
